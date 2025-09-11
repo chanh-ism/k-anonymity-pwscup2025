@@ -22,6 +22,7 @@ main module of mondrian
 # !/usr/bin/env python
 # coding=utf-8
 
+import numpy as np
 import pdb
 import time
 from .utils import cmp_value, value, merge_qi_value
@@ -36,6 +37,7 @@ RESULT = []
 QI_RANGE = []
 QI_DICT = []
 QI_ORDER = []
+QI_INDEX = []
 
 
 class Partition(object):
@@ -272,11 +274,13 @@ def anonymize_relaxed(partition):
     anonymize_relaxed(rhs)
 
 
-def init(data, k, QI_num=-1):
+def init(data, k, QI_num=-1, qi_index = [], is_cat = []):
     """
     reset global variables
     """
-    global GL_K, RESULT, QI_LEN, QI_DICT, QI_RANGE, QI_ORDER
+    global GL_K, RESULT, QI_LEN, QI_DICT, QI_RANGE, QI_ORDER, QI_INDEX, IS_CAT
+    QI_INDEX = qi_index
+    IS_CAT = is_cat
     if QI_num <= 0:
         QI_LEN = len(data[0]) - 1
     else:
@@ -302,8 +306,10 @@ def init(data, k, QI_num=-1):
         for index, qi_value in enumerate(value_list):
             QI_DICT[i][qi_value] = index
 
+    print(f"{QI_INDEX=}")
 
-def mondrian(data, k, relax=False, QI_num=-1):
+
+def mondrian(data, k, relax=False, QI_num=-1, qi_index = [], is_cat = []):
     """
     Main function of mondrian, return result in tuple (result, (ncp, rtime)).
     data: dataset in 2-dimensional array.
@@ -315,7 +321,7 @@ def mondrian(data, k, relax=False, QI_num=-1):
     In strict mondrian, lhs and rhs have not intersection.
     But in relaxed mondrian, lhs may be have intersection with rhs.
     """
-    init(data, k, QI_num)
+    init(data, k, QI_num, qi_index, is_cat)
     result = []
     data_size = len(data)
     low = [0] * QI_LEN
@@ -341,10 +347,35 @@ def mondrian(data, k, relax=False, QI_num=-1):
         rncp *= len(partition)
         ncp += rncp
         dp += len(partition) ** 2
+
+        # CHANH: Get all values of each attribute in the partition
+        partition_qi_values = list(zip(*partition.member))
+
+        CAT_INDEX = [i for i in range(QI_LEN) if IS_CAT[i] is True]
+        
         for record in partition.member[:]:
             for index in range(QI_LEN):
-                record[index] = merge_qi_value(QI_ORDER[index][partition.low[index]],
-                                QI_ORDER[index][partition.high[index]])
+                # CHANH:
+                # Original Classic Mondrian:
+                ## For numerical attributes: group all values in the partition
+                ## as min-max range, e.g., [1,2,3,4,5] -> 1~5
+                #
+                ## For categorical attributes: group all values in the partition
+                ## as a list, e.g., [A, B, C] -> A~B~C
+                #
+                # record[index] = merge_qi_value(QI_ORDER[index][partition.low[index]],
+                #                QI_ORDER[index][partition.high[index]])
+                
+                # CHANH:
+                ## Modified Classic Mondrian for PWSCUP: 
+                ## For numerical attributes, use the mean of all values in the partition
+                if index not in CAT_INDEX:
+                    record[index] = str(np.mean(partition_qi_values[index]).item())
+
+                # CHANH: 
+                # For categorical attributes, use the mode of all values in the partition
+                else:
+                    record[index] = str(np.argmax(np.bincount(partition_qi_values[index])).item())
             result.append(record)
     # If you want to get NCP values instead of percentage
     # please remove next three lines

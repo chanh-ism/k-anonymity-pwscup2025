@@ -7,6 +7,16 @@ def get_dataset_params(name):
         target_var = 'salary-class'
         IS_CAT = [True, False, True, True, True, True, True, True]
         max_numeric = {"age": 50.5}
+    elif name in ['b22_1_cat', 'b22_2_cat','b22_3_cat']:
+        QI_INDEX = list(range(1,11)) + [15, 16, 17, 18]
+        target_var = 'ID'
+        IS_CAT = [True, False, True, True, False, False, False, False, False, False, False, False, False, False]        
+        max_numeric = {}
+    elif name in ['b22_1', 'b22_2', 'b22_3']:
+        QI_INDEX = [2] + list(range(5,11)) + [15, 16, 17, 18]
+        target_var = 'ID'
+        IS_CAT = [False] * len(QI_INDEX)
+        max_numeric = {}
     elif name == Dataset.CMC:
         QI_INDEX = [1, 2, 4]
         target_var = 'method'

@@ -38,7 +38,7 @@ def classic_mondrian_anonymize(k, data, qi_index, mapping_dict=None, is_cat=None
     
     result, eval_result = mondrian(
         copy.deepcopy(data), 
-        k, relax, len(qi_index))
+        k, relax, len(qi_index), qi_index, is_cat)
 
     result_in_order = restore_column_order(result, qi_index)
 
