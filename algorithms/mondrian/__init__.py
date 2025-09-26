@@ -1,5 +1,6 @@
 import sys, copy, random
 from .mondrian import mondrian
+from .mondrian_pwscup2025 import mondrian_pwscup2025
 from utils.data import restore_column_order
 
 
@@ -38,7 +39,28 @@ def classic_mondrian_anonymize(k, data, qi_index, mapping_dict=None, is_cat=None
     
     result, eval_result = mondrian(
         copy.deepcopy(data), 
-        k, relax, len(qi_index), qi_index, is_cat)
+        k, relax, len(qi_index))
+
+    result_in_order = restore_column_order(result, qi_index)
+
+    if mapping_dict is not None:
+        restored = restore_num_to_cat(mapping_dict, result_in_order, qi_index, is_cat)
+        result_in_order = restored
+
+    ncp_score, runtime = eval_result
+
+    return result_in_order, (ncp_score, runtime)
+
+
+
+def pwscup2025_mondrian_anonymize(k, data, qi_index, mapping_dict=None, is_cat=None, is_int=None):
+    """
+    Modified Mondrian for PWS Cup 2025, based on Classic Mondrian
+    """
+    
+    result, eval_result = mondrian_pwscup2025(
+        copy.deepcopy(data), 
+        k, False, len(qi_index), is_cat, is_int)
 
     result_in_order = restore_column_order(result, qi_index)
 
