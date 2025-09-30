@@ -7,16 +7,16 @@ import pandas as pd
 from algorithms import k_anonymize
 from utils.data import numberize_categories
 
-parser = argparse.ArgumentParser("K-Anonymize")
+parser = argparse.ArgumentParser("anonymize-pws")
 parser.add_argument(
     "--method", type=str, default="pwscup2025_mondrian", help="K-Anonymity Method"
 )
 parser.add_argument("--k", type=int, default=5, help="K-Anonymity")
 parser.add_argument(
-    "-i", "--input", type=str, default=None, help="Input CSV file path (優先)"
+    "-i", "--input", type=str, required=True, help="Input CSV file path (優先)"
 )
 parser.add_argument(
-    "-o", "--out", type=str, default=None, help="Output CSV file path (優先)"
+    "-o", "--output", type=str, default=None, help="Output CSV file path (優先)"
 )
 
 
@@ -28,7 +28,6 @@ class Anonymizer:
             "classic_mondrian",
         ]
 
-        assert args.input is not None
         # ↓ 追加: 入出力パスの上書き
         self.input_csv = args.input
         self.output_csv = args.out

@@ -4,7 +4,7 @@ This repo is a fork from https://github.com/kaylode/k-anonymity.
 It has been modified for the purpose of PWS Cup 2025.
 
 ## Implemented $k$-Anonymity Methods
-- Classic Mondrian [[1]](#references): For reference only. Not applicable for PWS Cup 20205.
+- Classic Mondrian [[1]](#references): For reference only. Not applicable for PWS Cup 2025.
 - <u>Modified</u> Classic Mondrian (PWSCup2025 Mondrian): A modification of Classic Mondrian:
   - For numerical attributes: use _mean_ value instead of min-max range, and
   - For categorical attributes: use _mode_ value instead of summarization.
