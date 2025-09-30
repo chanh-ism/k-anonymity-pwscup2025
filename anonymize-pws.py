@@ -74,7 +74,7 @@ class Anonymizer:
             output_path = (
                 self.output_csv
                 if self.output_csv is not None
-                else f"{self.input_csv.split(".csv")[0]}-{self.method}-k{self.k}.csv"
+                else f'{self.input_csv.split(".csv")[0]}-{self.method}-k{self.k}.csv'
             )
             pd.DataFrame(anon_data, columns=ATT_NAMES).to_csv(output_path, index=False)
 
