@@ -1,21 +1,20 @@
 # Data anonymization using $k$-Anonymity for PWS Cup 2025
--------------------------------------------------------------
 This repo is a fork from https://github.com/kaylode/k-anonymity.
 
 It has been modified for the purpose of PWS Cup 2025.
 
-## Implemented $k$-Anonimity Methods
-- Classic Mondrian [[1]](##references): For reference only. Not applicable for PWS Cup 20205.
+## Implemented $k$-Anonymity Methods
+- Classic Mondrian [[1]](#references): For reference only. Not applicable for PWS Cup 20205.
 - <u>Modified</u> Classic Mondrian (PWSCup2025 Mondrian): A modification of Classic Mondrian:
   - For numerical attributes: use _mean_ value instead of min-max range, and
   - For categorical attributes: use _mode_ value instead of summarization.
 - Clustering-based (To be implemented):
-  - $k$-member [[2]](##references)
-  - One-Pass K-Means Algorithm (OKA) [[3]](##references)
+  - $k$-member [[2]](#references)
+  - One-Pass K-Means Algorithm (OKA) [[3]](#references)
 
 ## Executing
 To perform anonymization on a dataset, run:
-```shell
+```sh
 python anonymize-pws.py --method=<model_type> --k=<k-anonymity> --input=<input_csv_path> --output=<output_csv_path>
 ```
 - `model_type`: [`pwscup2025_mondrian` (default) | `classic_mondrian` | `cluster` (to be implemented) ]
@@ -24,7 +23,7 @@ python anonymize-pws.py --method=<model_type> --k=<k-anonymity> --input=<input_c
 - `output`: (Optional) path to output csv file (default: same directory as `input`)
 
 Example: To perform Modified Classic Mondrian (default) with $k=5$ (default) on `B22_1.csv`, run
-```shell
+```sh
 python anonymize-pws.py --input=B22_1.csv
 ```
 The result is stored in `B22_1-pwscup2025_mondrian-k5.csv`.
