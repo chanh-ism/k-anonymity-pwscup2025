@@ -30,7 +30,7 @@ class Anonymizer:
 
         # ↓ 追加: 入出力パスの上書き
         self.input_csv = args.input
-        self.output_csv = args.out
+        self.output_csv = args.output
 
         assert args.k > 1
         self.k = args.k
