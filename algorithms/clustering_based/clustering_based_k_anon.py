@@ -8,7 +8,6 @@ import operator
 import random
 import time
 from functools import cmp_to_key
-from tqdm import tqdm
 
 from algorithms.basic_mondrian.models.numrange import NumRange
 from algorithms.basic_mondrian.utils.utility import (cmp_str, get_num_list_from_str,

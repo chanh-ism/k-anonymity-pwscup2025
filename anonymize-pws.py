@@ -25,6 +25,7 @@ class Anonymizer:
         self.method = args.method
         assert self.method in [
             "pwscup2025_mondrian",
+            "classic_mondrian",
         ]
 
         assert args.input is not None
@@ -32,6 +33,7 @@ class Anonymizer:
         self.input_csv = args.input
         self.output_csv = args.out
 
+        assert args.k > 1
         self.k = args.k
 
     def anonymize(self):
@@ -73,7 +75,7 @@ class Anonymizer:
             output_path = (
                 self.output_csv
                 if self.output_csv is not None
-                else f"{self.input_csv.split(".csv")[0]}-anon-k{self.k}.csv"
+                else f"{self.input_csv.split(".csv")[0]}-{self.method}-k{self.k}.csv"
             )
             pd.DataFrame(anon_data, columns=ATT_NAMES).to_csv(output_path, index=False)
 

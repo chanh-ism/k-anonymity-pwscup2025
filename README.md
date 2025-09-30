@@ -1,105 +1,37 @@
-# Data anonymization using k-Anonymity
-## ✔️ Experiments
-- Provides 5 k-anonymization method: 
-  - Datafly
-  - Incognito 
-  - Topdown Greedy
-  - Classic Mondrian
-  - Basic Mondrian
-- Implements 3 anonymization metrics: 
-  - Equivalent Class size metric (CAVG)
-  - Discernibility Metric (DM)
-  - Normalized Certainty Penalty (NCP)
-- Implements 3 classification models: 
-  - Random Forests 
-  - Support Vector Machines 
-  - K-Nearest Neighbors
-
-
-## 📖 Reports
-- Report edit link: [link](./demo/report.pdf)
-- Slide link: [link](./demo/slides.pdf)
-
-## Folder Structure
-- A dataset must comes with a .csv file contains features information and a hierarchy folder which contains predefined generalization hierarchies for its QID attributes. 
-```
-this repo
-│   anonymize.py
-|
-└───data  
-│   │
-│   └───adult
-│       │   adult.csv
-│       └───hierarchies
-│       │     adult_hierarchy_workclass.csv
-│       │     ....
-```
-
-- Here is an example for a generalization hierarchy of the 'workclass' attribute from ADULT dataset, described in ```adult_hierarchy_workclass.csv```, which is a csv file using **";" as delimiter**
-```
-Private;Non-Government;*
-Self-emp-not-inc;Non-Government;*
-Self-emp-inc;Non-Government;*
-Federal-gov;Government;*
-Local-gov;Government;*
-State-gov;Government;*
-Without-pay;Unemployed;*
-Never-worked;Unemployed;*
-```
-
-which describes this tree:
-
-<div align="center"><img width="450" alt="screen" src="demo/adult_workclass.PNG"></div>
-
+# Data anonymization using $k$-Anonymity for PWS Cup 2025
 -------------------------------------------------------------
+This repo is a fork from https://github.com/kaylode/k-anonymity.
 
-## 🌟 Executing
-To anonymize dataset, run:
+It has been modified for the purpose of PWS Cup 2025.
+
+## Implemented $k$-Anonimity Methods
+- Classic Mondrian [[1]](##references): For reference only. Not applicable for PWS Cup 20205.
+- <u>Modified</u> Classic Mondrian (PWSCup2025 Mondrian): A modification of Classic Mondrian:
+  - For numerical attributes: use _mean_ value instead of min-max range, and
+  - For categorical attributes: use _mode_ value instead of summarization.
+- Clustering-based (To be implemented):
+  - $k$-member [[2]](##references)
+  - One-Pass K-Means Algorithm (OKA) [[3]](##references)
+
+## Executing
+To perform anonymization on a dataset, run:
+```shell
+python anonymize-pws.py --method=<model_type> --k=<k-anonymity> --input=<input_csv_path> --output=<output_csv_path>
 ```
-python anonymize.py --method=<model_type> --k=<k-anonymity> --dataset=<dataset_name>
+- `model_type`: [`pwscup2025_mondrian` (default) | `classic_mondrian` | `cluster` (to be implemented) ]
+- `k`: $k > 1$ (default: $5$)
+- `input`: path to input csv file
+- `output`: (Optional) path to output csv file (default: same directory as `input`)
+
+Example: To perform Modified Classic Mondrian (default) with $k=5$ (default) on `B22_1.csv`, run
+```shell
+python anonymize-pws.py --input=B22_1.csv
 ```
-- **model_type**: [mondrian | classic_mondrian | mondrian_ldiv | topdown | cluster | datafly]
-- **dataset_name**: [adult | cahousing | cmc | mgm | informs | italia]
+The result is stored in `B22_1-pwscup2025_mondrian-k5.csv`.
 
-Results will be in ```results/{dataset}/{method}``` folder
+## References
+[1] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. "Mondrian multidimensional k-anonymity." Proceedings of the 22nd International conference on data engineering (ICDE'06). IEEE, 2006. https://doi.org/10.1109/ICDE.2006.101.
 
-To run evaluation metrics on every combination of algorithms, datasets and value k, run:
-```
-python visualize.py
-```
+[2] Byun, JW., Kamra, A., Bertino, E., Li, N. "Efficient k-Anonymization Using Clustering Techniques." Proceedings of the International conference on database systems for advanced applications (DASFAA 2007). Lecture Notes in Computer Science, vol 4443. Springer, 2007. https://doi.org/10.1007/978-3-540-71703-4_18.
 
-Results will be in ```demo/{metrics.png, metrics_ml.png}``` 
-
-## K-Anonymity examples
-
-| Before anonymization | After anonymization with k = 2 |
-|:-------------------------:|:-------------------------:|
-|<img width="450" alt="screen" src="demo/italia_before.png"> | <img width="450" alt="screen" src="demo/italia_after.png"> |
-
-## Evaluation Metrics
-  
-| Evaluate anonymization using information loss metrics |
-|:-------------------------:|
-|<img width="1000" height="600" alt="screen" src="demo/metrics.png"> |
-|<img width="1000" height="600" alt="screen" src="demo/metrics2.png"> |
-  
-
-| Evaluate anonymization using classification models |
-|:-------------------------:|
-|<img width="1000" height="600" alt="screen" src="demo/metrics_ml.png"> |
-|<img width="1000" height="600" alt="screen" src="demo/metrics_ml2.png"> |
-
-
-
-## References:
-- Basic Mondrian, Top-Down Greedy, Cluster-based (https://github.com/fhstp/k-AnonML)
-- L-Diversity (https://github.com/Nuclearstar/K-Anonymity, https://github.com/qiyuangong/Mondrian_L_Diversity)
-- Classic Mondrian (https://github.com/qiyuangong/Mondrian)
-- Datafly Algorithm (https://github.com/nazilkbahar/python-datafly)
-- Normalized Certainty Penalty from [Utility-Based Anonymization for Privacy Preservation with
-Less Information Loss](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.450.6140&rep=rep1&type=pdf)
-- Discernibility, Average Equivalent Class Size from [A Systematic Comparison and Evaluation
-of k-Anonymization Algorithms
-for Practitioners](http://www.tdp.cat/issues11/tdp.a169a14.pdf)
-- [Privacy in a Mobile-Social World](https://courses.cs.duke.edu//fall12/compsci590.3/slides/lec3.pdf)
-- Code and idea based on [k-Anonymity in Practice: How Generalisation and Suppression Affect Machine Learning Classifiers](https://arxiv.org/abs/2102.04763)
+[3] Lin, Jun-Lin, and Meng-Cheng Wei. "An efficient clustering method for k-anonymization." Proceedings of the 2008 international workshop on Privacy and anonymity in information society. ACM, 2008. https://doi.org/10.1145/1379287.1379297.
