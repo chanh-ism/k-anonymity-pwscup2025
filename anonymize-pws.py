@@ -26,6 +26,8 @@ class Anonymizer:
         assert self.method in [
             "pwscup2025_mondrian",
             "classic_mondrian",
+            # "kmember",
+            "oka",
         ]
 
         # ↓ 追加: 入出力パスの上書き
@@ -54,18 +56,20 @@ class Anonymizer:
 
         anon_params = {
             "name": self.method,
+            "data": data.values.tolist(),
             "value": self.k,
             "qi_index": QI_INDEX,
             "sa_index": SA_INDEX,
             "is_cat": IS_CATEGORICAL,
             "is_int": IS_INT,
         }
-
-        mapping_dict, raw_data = numberize_categories(
-            data.values.tolist(), QI_INDEX, SA_INDEX, IS_CATEGORICAL
-        )
-        anon_params["mapping_dict"] = mapping_dict
-        anon_params["data"] = raw_data
+        
+        if "mondrian" in self.method:
+            mapping_dict, raw_data = numberize_categories(
+                data.values.tolist(), QI_INDEX, SA_INDEX, IS_CATEGORICAL
+            )
+            anon_params["mapping_dict"] = mapping_dict
+            anon_params["data"] = raw_data
 
         anon_data, runtime = k_anonymize(anon_params)
 
