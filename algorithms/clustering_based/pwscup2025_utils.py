@@ -27,8 +27,12 @@ def get_distance(r, record, qi_index, is_cat, num_ranges):
 
 def get_information_loss(record, cluster, qi_index, is_cat, num_ranges):
     information_losses = []
-    size = len(cluster) + 1
-    columns = list(zip(*(data + [record])))
+    if record == None:
+        size = len(cluster)
+        columns = list(zip(*cluster))
+    else:
+        size = len(cluster) + 1
+        columns = list(zip(*(cluster + [record])))
 
     for pos, idx in enumerate(qi_index):
         if is_cat[pos] == True:

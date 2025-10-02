@@ -26,7 +26,7 @@ class Anonymizer:
         assert self.method in [
             "pwscup2025_mondrian",
             "classic_mondrian",
-            # "kmember",
+            "kmember",
             "oka",
         ]
 

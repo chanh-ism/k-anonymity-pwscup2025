@@ -95,14 +95,14 @@ def find_best_cluster(record, clusters):
 def do_clustering_oka(data, k):
     clusters = []
 
-    for i in range(int(len(data)/k)):
+    for i in range(int(len(data) / k)):
         r_i_idx = random.randrange(len(data))
         clusters.append(OKA_Cluster(data.pop(r_i_idx)))
 
     clustering_progress_bar = tqdm(
         total=len(data),
         desc="   Clustering Progress",
-        bar_format="{l_bar}{bar}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     # Clustering Stage
@@ -116,7 +116,7 @@ def do_clustering_oka(data, k):
     adjustment_progress_bar = tqdm(
         total=(len(clusters) * 2),
         desc="   Adjustment Progress",
-        bar_format="{l_bar}{bar}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     # Adjustment Stage
@@ -132,7 +132,7 @@ def do_clustering_oka(data, k):
             cluster.sort_by_distance()
             adjusting_records.extend(cluster.pop_tops(len(cluster) - k))
         adjustment_progress_bar.update(1)
-    
+
     while len(adjusting_records) > 0:
         record = adjusting_records.pop()
         if len(less_than_k_clusters) > 0:
@@ -162,15 +162,18 @@ def pwscup2025_oka_anon(data, k, qi_index, is_cat, is_int):
     result = []
     start_time = time.time()
     clusters = do_clustering_oka(data.copy(), k)
-    # print(f"Information Loss: {sum(information_losses)}")
 
     progress_bar = tqdm(
         total=len(clusters),
         desc="Anonymization Progress",
-        bar_format="{l_bar}{bar}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
+    information_loss = 0
     for cluster in clusters:
+        information_loss += get_information_loss(
+            None, cluster.member, qi_index, is_cat, NUM_RANGES
+        )
         columns = list(zip(*cluster.member))
         for pos, idx in enumerate(qi_index):
             anon_value = None
@@ -186,7 +189,7 @@ def pwscup2025_oka_anon(data, k, qi_index, is_cat, is_int):
         progress_bar.update(1)
 
     progress_bar.close()
-    
+    print(f"Information Loss: {information_loss}")
     rtime = float(time.time() - start_time)
     return (result, rtime)
 
