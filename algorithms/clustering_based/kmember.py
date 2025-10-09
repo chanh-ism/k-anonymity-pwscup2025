@@ -66,7 +66,7 @@ def do_clustering_kmember(data, k, qi_index, is_cat):
     progress_bar = tqdm(
         total=len(data),
         desc="   Clustering Progress",
-        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     while len(data) >= k:
@@ -113,7 +113,7 @@ def pwscup2025_kmember_anon(data, k, qi_index, is_cat, is_int):
     progress_bar = tqdm(
         total=len(clusters),
         desc="Anonymization Progress",
-        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     for cluster in clusters:

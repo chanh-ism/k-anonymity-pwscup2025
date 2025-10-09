@@ -102,7 +102,7 @@ def do_clustering_oka(data, k):
     clustering_progress_bar = tqdm(
         total=len(data),
         desc="   Clustering Progress",
-        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     # Clustering Stage
@@ -116,7 +116,7 @@ def do_clustering_oka(data, k):
     adjustment_progress_bar = tqdm(
         total=(len(clusters) * 2),
         desc="   Adjustment Progress",
-        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     # Adjustment Stage
@@ -166,7 +166,7 @@ def pwscup2025_oka_anon(data, k, qi_index, is_cat, is_int):
     progress_bar = tqdm(
         total=len(clusters),
         desc="Anonymization Progress",
-        bar_format="{l_bar}{bar:100}|{n_fmt}/{total_fmt} [{elapsed}]",
+        bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
     )
 
     information_loss = 0

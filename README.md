@@ -15,24 +15,32 @@ It has been modified for the purpose of PWS Cup 2025.
 ## Executing
 To perform anonymization on a dataset, run:
 ```sh
-python anonymize-pws.py --method=<model_type> --k=<k-anonymity> --input=<input_csv_path> --output=<output_csv_path>
+python anonymize-pws.py --method <model_type> --k <k-anonymity> --input <input_csv_path> --output <output_csv_path> --flags-ignored <flags_to_be_ignore>
 ```
 - `model_type`: [`pwscup2025_mondrian` (default) | `classic_mondrian` | `oka` | `kmember` ]
-- `k`: $k > 1$ (default: $5$)
-- `input`: path to input csv file
-- `output`: (Optional) path to output csv file (default: same directory as `input`)
+- `k-anonymity`: $k > 1$ (default: $5$)
+- `input_csv_path`: path to input csv file
+- `output_csv_path`: (Optional) path to output csv file (default: same directory as `input`)
+- `flags_to_be_ignore`: (Optional) flag(s) [`asthma`, `stroke`, `obesity`, `depression`] to be IGNORED (i.e., NOT anonymized)\
+(Default: no flags are ignored, means all flags are NOT anonymized)
 
 __Example 1__: To perform Modified Classic Mondrian (default) with $k=5$ (default) on `B22_1.csv`, run
 ```sh
-python anonymize-pws.py --input=B22_1.csv
+python anonymize-pws.py --input B22_1.csv
 ```
-The result is stored in `B22_1-pwscup2025_mondrian-k5.csv`.
+The result is stored in `B22_1-pwscup2025_mondrian-k5.csv` by default.
 
 __Example 2__: To perform OKA with $k=2$ on `B22_1.csv`, run
 ```sh
-python anonymize-pws.py --input=B22_1.csv --method=oka --k=2
+python anonymize-pws.py --input B22_1.csv --method oka --k 2
 ```
-The result is stored in `B22_1-oka-k2.csv`.
+The result is stored in `B22_1-oka-k2.csv` by default.
+
+__Example 3__: To perform OKA with $k=5$ (default) on `B22_1.csv` and ignoring `asthma` and `stroke` flags, run
+```sh
+python anonymize-pws.py --input B22_1.csv --method oka --flags-ignored asthma stroke
+```
+The result is stored in `B22_1-oka-k5-ignore_asthma_stroke.csv` by default.
 
 ## References
 [1] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. "Mondrian multidimensional k-anonymity." Proceedings of the 22nd International conference on data engineering (ICDE'06). IEEE, 2006. https://doi.org/10.1109/ICDE.2006.101.
