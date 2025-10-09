@@ -124,7 +124,7 @@ class Anonymizer:
                     if ignore_flags_txt == ""
                     else f"-ignore_{ignore_flags_txt}"
                 )
-            output_path = f'{self.input_csv.split(".csv")[0]}-{self.method}-k{self.k}{ignore_txt}.csv'
+                output_path = f'{self.input_csv.split(".csv")[0]}-{self.method}-k{self.k}{ignore_txt}.csv'
             pd.DataFrame(anon_data, columns=ATT_NAMES).to_csv(output_path, index=False)
             print(f"Saved output to '{output_path}'.")
 
